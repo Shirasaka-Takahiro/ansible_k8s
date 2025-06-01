@@ -1,0 +1,78 @@
+---
+- name: disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+  ignore_errors: yes
+
+- name: disable swap
+  command: swapoff -a
+
+- name: disable swap on fstab
+  shell: sed -i '/swap/d' /etc/fstab
+
+#- name: set kernel parameters
+#  sysctl:
+#    name={{ item.param }}
+#    value={{ item.value }}
+#    state=present
+#  with_items: 
+#    - { param: 'net.ipv6.conf.all.disable_ipv6', value: '1' }
+#    - { param: 'net.ipv6.conf.default.disable_ipv6', value: '1' }
+
+- name: modprobe overlay
+  community.general.modprobe:
+    name: overlay
+
+- name: modprobe br_netfilter
+  community.general.modprobe:
+    name: br_netfilter
+
+- name: sysctl settings for k8s
+  template:
+    src: ../templates/sysctl.conf
+    dest: /etc/sysctl.d/99-kubernetes.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: sysctl --system
+  shell: sysctl --system
+
+- name: reset containerd config
+  shell: containerd config default | tee /etc/containerd/config.toml >/dev/null 2>&1
+
+- name: enable SystemdCgroup in containerd config
+  shell: sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+
+- name: restart containerd
+  systemd:
+    name: containerd
+    state: restarted
+    enabled: yes
+
+- name: copy kubernetes.repo file
+  template:
+    src: ../templates/kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install k8s packages
+  yum:
+    name: "{{item}}" 
+    state: present
+    disable_excludes: kubernetes
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+- name: start kubelet
+  systemd:
+    name: kubelet
+    state: started
+    daemon_reload: yes
+    enabled: yes

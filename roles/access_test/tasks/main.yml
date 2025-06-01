@@ -1,0 +1,5 @@
+---
+- name: copy test_access.txt
+  copy:
+    src: ../templates/test_access.txt
+    dest: /tmp

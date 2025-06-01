@@ -1,0 +1,17 @@
+---
+- hosts: workers
+  become: true
+  user: ansible-user
+  roles:
+    #- access_test
+    - common/yum_update
+    - common/firewalld
+    - common/selinux
+    - common/timezone
+    - common/tools
+    - common/kernel
+    - common/file_descriptor
+    - common/history_date
+    - common/postfix
+    - docker
+    - k8s

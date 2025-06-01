@@ -1,0 +1,5 @@
+---
+- name: copy limits.conf
+  template:
+    src: ../templates/limits.conf
+    dest: /etc/security

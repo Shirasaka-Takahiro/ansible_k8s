@@ -1,0 +1,29 @@
+---
+##install epel-release
+- name: install epel-release
+  yum:
+    name: epel-release
+    state: present
+
+##install optional packages
+- name: install optional packages
+  yum:
+    name: "{{item}}" 
+    state: present
+    enablerepo: epel
+  with_items:
+    - net-tools
+    - nmap
+    - vim
+    - bind-utils
+    - telnet
+    - wget
+    - dstat
+    - unzip
+    - zip
+    - postfix
+    - git
+    - curl
+    - bash-completion
+    - device-mapper-persistent-data
+    - lvm2

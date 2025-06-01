@@ -1,0 +1,7 @@
+---
+##disable SELinux
+- name: disable selinux
+  selinux: 
+    state: disabled
+  register: selinux
+  ignore_errors: yes

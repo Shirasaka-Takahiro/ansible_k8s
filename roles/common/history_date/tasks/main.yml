@@ -1,0 +1,2 @@
+- name: add history date
+  shell: echo "HISTTIMEFORMAT='%Y-%m-%dT%T%z '" >> /root/.bashrc

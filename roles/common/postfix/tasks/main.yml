@@ -1,0 +1,11 @@
+---
+- name: install postfix
+  yum:
+    name: postfix
+    state: latest
+
+- name: start and enable postfix
+  service:
+    name: postfix
+    state: started
+    enabled: yes

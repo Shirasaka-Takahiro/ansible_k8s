@@ -1,0 +1,3 @@
+---
+- name: init kubeadm on controle plane
+  command: kubeadm init --apiserver-advertise-address=192.168.33.88 --pod-network-cidr={{ pod_network_cidr }} --upload-certs
