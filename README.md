@@ -7,7 +7,6 @@
 3. kubeadm_init
 
 # How to run
-<br >
 (Before running middleware playbooks, You should run access_test playbook to check the target server is correct)
 1. Copy private key to the keys/user.key
 2. Modify group_vars/all.yml
