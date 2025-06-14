@@ -19,8 +19,8 @@
     - containerd.io
     - python3-pip
 
-#- name: start and enable docker
-#  service:
-#    name: docker
-#    state: started
-#    enabled: yes
+- name: start and enable docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
